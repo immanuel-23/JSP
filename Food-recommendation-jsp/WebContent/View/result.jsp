@@ -9,7 +9,8 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>List of food based on your tase </h1>
+	<h1>List of food based on your taste </h1>
+	
 	<c:forEach var="taste" items="${FoodList}">
 		<P>${taste}</P>
 

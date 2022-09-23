@@ -21,6 +21,23 @@ public class Employee {
 		this.salaryPerAnum=salaryPerAnum;
 	}
 	
+	public Employee(String firstName, String lastName, String email, String department, int salary) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.department = department;
+		this.salary = salary;
+	}
+
+	public Employee(String fName, String lName, String email, int id, String dept, int salary) {
+		this.firstName = fName;
+		this.lastName = lName;
+		this.email = email;
+		this.id=id;
+		this.department = dept;
+		this.salary = salary;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}

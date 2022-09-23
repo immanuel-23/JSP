@@ -1,5 +1,7 @@
 package com.aurionpro.model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,7 +12,7 @@ import javax.sql.DataSource;
 
 public class EmployeeDBUtil {
 
-	private DataSource datasource;
+	private static DataSource datasource;
 
 	public EmployeeDBUtil(DataSource datasource) {
 		// TODO Auto-generated constructor stub
@@ -18,7 +20,7 @@ public class EmployeeDBUtil {
 
 	}
 
-	public List<Employee> getStudentList() {
+	public static List<Employee> getStudentList() {
 		java.sql.Connection conn = null;
 		Statement stmt = null;
 		ResultSet result = null;
@@ -46,6 +48,128 @@ public class EmployeeDBUtil {
 		}
 		return employee;
 		
+	}
+
+	public static void addEmployee(Employee tempEmployee) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = datasource.getConnection();
+			String sql = "insert into employee(first_name,last_name,email,department,salary)values(?,?,?,?,?);";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, tempEmployee.getFirstName());
+			stmt.setString(2, tempEmployee.getLastName());
+			stmt.setString(3, tempEmployee.getEmail());
+			stmt.setString(4, tempEmployee.getDepartment());
+			stmt.setString(5, String.valueOf(tempEmployee.getSalary()));
+
+			stmt.execute();
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			close(conn,stmt, null);
+		}
+	}
+
+	private static void close(Connection conn, PreparedStatement stmt, ResultSet result) {
+		try {
+			if (conn != null) {
+				conn.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+			if (result != null) {
+				result.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public Employee getEmployee(int id) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+		
+		Employee employee= null;
+		
+		try {
+			conn = datasource.getConnection();
+			String sql = "select * from employee where id = ?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1,id);
+			
+			result = stmt.executeQuery();
+			if(result.next()) {
+				String email = result.getString("email");
+				String firstName = result.getString("first_name");
+				String lastName = result.getString("last_name");
+				String department= result.getString("last_name");
+				int id1 = Integer.parseInt(result.getString("id"));
+				int salary = Integer.parseInt(result.getString("salary"));
+
+				employee = new Employee(firstName, lastName, email,id1, department,salary);
+			
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			close(conn,stmt,result);
+		}
+		return employee;
+	}
+
+	public void updateEmployee(Employee tempEmployee) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = datasource.getConnection();
+			String sql = "update employee set first_name=?,last_name=?,email=? ,department=?, salary=? where id=?;";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, tempEmployee.getFirstName());
+			stmt.setString(2, tempEmployee.getLastName());
+			stmt.setString(3, tempEmployee.getEmail());
+			stmt.setString(4, tempEmployee.getDepartment());
+			stmt.setString(5, String.valueOf(tempEmployee.getSalary()));
+			
+			stmt.setInt(6, tempEmployee.getId());
+
+			
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+		finally {
+			close(conn,stmt,null);
+		}
+	}
+
+	public void deleteEmployee(int id) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = datasource.getConnection();
+			String sql = "delete from employee where id=?;";
+
+			stmt = conn.prepareStatement(sql);
+
+			stmt.setInt(1, id);
+			
+			stmt.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(conn, stmt, null);
+
+		}
 	}
 
 }

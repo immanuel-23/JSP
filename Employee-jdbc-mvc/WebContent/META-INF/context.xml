@@ -6,5 +6,4 @@
                username="emp" password="emp" 
                driverClassName="com.mysql.cj.jdbc.Driver"
                url="jdbc:mysql://localhost:3306/employeeweb?useSSL=false&amp;serverTimezone=UTC"/>
-
 </Context>

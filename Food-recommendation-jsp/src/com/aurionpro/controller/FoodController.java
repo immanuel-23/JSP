@@ -31,9 +31,11 @@ public class FoodController extends HttpServlet {
 		String c=request.getParameter("taste");
 		List<String> recommendedFood=new Food().getFood(c);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("View/result.jsp");
+		
 //		for(int i=0;i<recommendedFood.size();i++) {
 //			out.print(recommendedFood.get(i));
 //		}
+		
 		request.setAttribute("FoodList", recommendedFood);
 		dispatcher.forward(request, response);
 		
