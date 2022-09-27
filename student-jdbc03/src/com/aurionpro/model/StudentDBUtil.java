@@ -163,4 +163,36 @@ public class StudentDBUtil {
 	
 		
 	}
+
+	 public List<Student> searchStudents(String name) {
+			Connection conn = null;
+			PreparedStatement stmt = null;
+			ResultSet result = null;
+			List<Student> students = new ArrayList<>();
+			try {
+				conn = dataSource.getConnection();
+//				String sql = "select * from student where first_name=? or last_name=?;";
+				String sql = "select * from student where first_name like ? or last_name like ?;";
+				String search = "%"+name+"%";
+				stmt = conn.prepareStatement(sql);
+				stmt.setString(1, search);
+				stmt.setString(2, search);
+				result = stmt.executeQuery();
+				while(result.next()) {
+					int id = result.getInt("id");
+					String firstName = result.getString("first_name");
+					String lastName = result.getString("last_name");
+					String email = result.getString("email");
+					students.add(new Student(firstName, lastName, email, id));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally {
+				close(conn, stmt, result);
+			}
+			return students;
+
+		}
 }
+	

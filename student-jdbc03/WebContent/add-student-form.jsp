@@ -6,6 +6,7 @@
 	rel="stylesheet"
 	integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
 	crossorigin="anonymous">
+	<script src="validation.js"></script>
 	
 <!DOCTYPE html>
 <html>
@@ -16,15 +17,19 @@
 <body>
 	<h1>Welcome</h1>
 	<h2>Add Student</h2>
-	<form action="StudentController">
+	<form action="StudentController" id="aform">
 	
-		First Name:<input type="text" name="fname"> <br> <br>
-		Last Name:<input type="text" name="lname"> <br> <br>
+		First Name:<input type="text" name="fname" > <br> <br>
+		Last Name:<input type="text" name="lname" > <br> <br>
 		Email id:<input type="email" name="email"><br><br>
 		<input type="hidden" name="command" value="add">
 		
 		<input type="submit" value="Add Student">
 		
 	</form>
+	<script src=   
+    "https://ajax.googleapis.com/ajax/libs/   
+    jquery/3.3.1/jquery.min.js">   
+    </script>   
 </body>
 </html>
