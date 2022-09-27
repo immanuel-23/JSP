@@ -172,4 +172,35 @@ public class EmployeeDBUtil {
 		}
 	}
 
+	public List<Employee> searchEmployee(String name) {
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+		List<Employee> emp = new ArrayList<>();
+		try {
+			conn = datasource.getConnection();
+			String sql = "select * from employee where first_name like ? or last_name like ?;";
+			String search = "%"+name+"%";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, search);
+			stmt.setString(2, search);
+			result = stmt.executeQuery();
+			while(result.next()) {
+				String firstName = result.getString("first_name");
+				String lastName = result.getString("last_name");
+				String email = result.getString("email");
+				String department=result.getString("department");
+				int salary = Integer.parseInt(result.getString("salary"));
+				emp.add(new Employee(firstName, lastName, email, department, salary));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			close(conn, stmt, result);
+		}
+		return emp;
+
+	}
+
 }

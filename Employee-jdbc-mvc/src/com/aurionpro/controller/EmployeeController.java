@@ -38,13 +38,11 @@ public class EmployeeController extends HttpServlet {
 			throws ServletException, IOException {
 		String command = request.getParameter("command");
 		System.out.println(command);
-		System.out.println(request.getParameter("studentId"));
 
 		if (command == null) {
 			command = "list";
 
 		}
-
 		switch (command) {
 		case "add":
 			addEmployee(request, response);
@@ -60,7 +58,9 @@ public class EmployeeController extends HttpServlet {
 		case "delete":
 			deleteEmployee(request, response);
 			break;
-
+		case "search":
+			searchEmployee(request,response);
+			break;
 		default:
 			listEmployee(request, response);
 		}
@@ -74,6 +74,21 @@ public class EmployeeController extends HttpServlet {
 //		dispatcher.forward(request, response);
 //		addEmployee(request,response);
 
+	}
+
+	private void searchEmployee(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String name=request.getParameter("ename");
+		if(name=="") {
+			listEmployee(request, response);
+		}
+		List<Employee> EmployeeList = employeedbutil.searchEmployee(name);
+		if(EmployeeList.isEmpty()) {
+			System.out.println("coudnt found");
+		}
+		System.out.println(EmployeeList);
+		request.setAttribute("employeeList", EmployeeList);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("View-Employee-List.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	private void deleteEmployee(HttpServletRequest request, HttpServletResponse response) {
@@ -132,7 +147,6 @@ public class EmployeeController extends HttpServlet {
 
 		Employee tempEmployee = new Employee(firstName, lastName, email,  department, salary);
 		EmployeeDBUtil.addEmployee(tempEmployee);
-
 		listEmployee(request, response);
 
 	}
